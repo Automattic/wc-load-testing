@@ -25,6 +25,6 @@
 		</p>
 	</div>
 	<div class="results">
-		<div id="wc-add-to-cart-results-graph"></div>
+		<canvas id="wc-add-to-cart-results-graph"></canvas>
 	</div>
 </div>

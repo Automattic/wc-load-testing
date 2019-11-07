@@ -26,7 +26,8 @@ class Dashboard {
 	public static function enqueue_scripts() {
 		if ( 'tools_page_load-testing' === \get_current_screen()->id ) {
 			wp_enqueue_script( 'load-testing-dashboard', plugins_url( '/assets/js/dashboard.js', WC_LOAD_TEST_PATH ) );
-			wp_enqueue_script( 'd3js',plugins_url( '/assets/js/d3.js', WC_LOAD_TEST_PATH ) );
+			wp_enqueue_script( 'chartjs', plugins_url( '/node_modules/chart.js/dist/Chart.js', WC_LOAD_TEST_PATH ) );
+			wp_enqueue_style( 'chartjs', plugins_url( '/node_modules/chart.js/dist/Chart.css', WC_LOAD_TEST_PATH ) );
 		}
 	}
 

@@ -2,7 +2,7 @@
 
 const AddToCartTest = {
 
-	runTest: async ( batchSize, batchCount ) => {
+	runTest: async ( batchSize, batchCount, batchCB ) => {
 		const args = await AddToCartTest.setupRequest();
 
 		const requestCompletionTime = [];
@@ -11,8 +11,9 @@ const AddToCartTest = {
 			let timeStart = Date.now();
 			const requestPromise = AddToCartTest.generateTestRequest( args, batchCount ).then(
 				() => {
-					const timeEnd = Date.now();
-					requestCompletionTime.push( timeEnd - timeStart );
+					const timeTaken = Date.now() - timeStart;
+					requestCompletionTime.push( timeTaken );
+					batchCB( timeTaken );
 				},
 				() => {
 					errorCount += 1;
@@ -20,7 +21,6 @@ const AddToCartTest = {
 			);
 			await requestPromise;
 		}
-		console.log("All request completed", requestCompletionTime );
 		return requestCompletionTime;
 	},
 
@@ -74,12 +74,36 @@ window.onload = () => {
 	startButton.onclick = async () => {
 		startButton.classList.add( 'disabled' );
 		try {
-			const batchCount = document.getElementById(
+			const ctx = document.getElementById('wc-add-to-cart-results-graph').getContext('2d');
+			const chart = new Chart( ctx, {
+				type: 'line',
+				data: {
+					datasets: [ { data: [], fill: false, label: 'Time taken to complete whole batch (in ms)' } ],
+				},
+				options: {
+					title: {
+						display: true,
+						text: "Add to Cart test"
+					}
+				}
+			} );
+			let labelCount = 1;
+			const batches = document.getElementById(
 				'wc-add-to-cart-number-of-batches' ).value || 10;
 			const batchSize = document.getElementById(
 				'wc-add-to-cart-batch-size' ).value || 5;
-			const results = await AddToCartTest.runTest( batchSize,
-				batchCount );
+			const results = await AddToCartTest.runTest(
+				batches,
+				batchSize,
+				( newResult ) => {
+					chart.data.labels.push( labelCount );
+					labelCount += 1;
+					chart.data.datasets.forEach( ( dataset ) => {
+						dataset.data.push( newResult );
+					} );
+					chart.update();
+				},
+			);
 		} finally {
 			startButton.classList.remove( 'disabled' );
 		}
