@@ -3,9 +3,7 @@
 
 namespace WC\LoadTesting\Admin;
 
-error_log("PAth: " . WC_LOAD_TEST_DIR . "/includes/test-classes/*.php" );
 foreach( glob( WC_LOAD_TEST_DIR . "/includes/test-classes/*.php" ) as $file ) {
-	error_log("Requiring $file");
 	require_once $file;
 }
 
@@ -43,17 +41,22 @@ class Dashboard {
 			array( __CLASS__, 'render_load_testing_admin_page' )
 		);
 		add_action( "load-$hook", array( __CLASS__, 'load_testing_setup' ) );
+		add_action( "load-$hook", array( __CLASS__, 'load_testing_exec' ) );
 	}
 
 	public static function render_load_testing_admin_page() {
 		if ( ! empty( $_POST['test_slug'] ) ) {
 			return;
 		}
+		wp_register_script( 'd3js', 'https://d3js.org/d3.v5.min.js', null, null, true );
+		wp_enqueue_script('d3js');
 		?>
 		<h1>WooCommerce Load Testing</h1>
+		<div class="tests-list"></div>
 		<p class="submit">
-			<input type="button" name="start_test" id="start_test" class="button button-primary" value="Start">
+			<input type="button" class="button button-primary test-submit add-to-cart" name="add-to-cart" value="add-to-cart">
 		</p>
+		<div class="results-area"></div>
 		<?php
 	}
 
@@ -76,10 +79,9 @@ class Dashboard {
 			return;
 		}
 
-		$args = $_POST['args'];
 		switch ( $_POST['test_slug'] ) {
 			case 'add-to-cart':
-				\AddToCartLoadTest::add_simple_product_to_cart( $args );
+				\AddToCartLoadTest::add_simple_product_to_cart();
 		}
 		wp_send_json( array(), 200 );
 	}

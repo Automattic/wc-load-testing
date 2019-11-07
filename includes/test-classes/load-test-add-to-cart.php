@@ -33,9 +33,11 @@ class AddToCartLoadTest extends LoadTest {
 		);
 	}
 
-	public static function add_simple_product_to_cart( $args ) {
-		$_REQUEST['add-to-cart'] = $args['product_id'];
-		$_REQUEST['quantity'] = 1;
+	public static function add_simple_product_to_cart() {
+		$_REQUEST['add-to-cart'] = $_POST['product_id'];
+		$_REQUEST['quantity'] = $_POST['quantity'];
+		WC()->frontend_includes();
+		wc_load_cart();
 		WC_Form_Handler::add_to_cart_action();
 	}
 
