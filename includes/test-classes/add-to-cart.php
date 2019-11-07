@@ -4,15 +4,6 @@ require_once WC_LOAD_TEST_DIR . '/includes/abstract-load-test.php';
 
 class AddToCartLoadTest extends LoadTest {
 
-	public static function get_tests() {
-		return array(
-			'add_to_cart' => array(
-				'label' => 'Add Simple Product to cart.',
-				'callback' => 'add_simple_product_to_cart'
-			),
-		);
-	}
-
 	public static function setup() {
 		$product = new \WC_Product();
 		$product->set_props(
@@ -44,5 +35,9 @@ class AddToCartLoadTest extends LoadTest {
 	public static function teardown( $product_id ) {
 		$product = \WC_Product( $product_id );
 		$product->delete( true );
+	}
+
+	public static function render() {
+		require WC_LOAD_TEST_DIR . '/templates/add-to-cart.php';
 	}
 }

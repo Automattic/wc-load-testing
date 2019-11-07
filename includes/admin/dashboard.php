@@ -50,14 +50,13 @@ class Dashboard {
 		}
 		wp_register_script( 'd3js', 'https://d3js.org/d3.v5.min.js', null, null, true );
 		wp_enqueue_script('d3js');
+
 		?>
 		<h1>WooCommerce Load Testing</h1>
-		<div class="tests-list"></div>
-		<p class="submit">
-			<input type="button" class="button button-primary test-submit add-to-cart" name="add-to-cart" value="add-to-cart">
-		</p>
-		<div class="results-area"></div>
 		<?php
+
+		// All available load tests.
+		\AddToCartLoadTest::render();
 	}
 
 	public static function load_testing_setup() {

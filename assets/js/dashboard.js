@@ -1,16 +1,15 @@
 /*jshint esversion: 6 */
 
-const LoadTestManager = {
+const AddToCartTest = {
 
-	runTest: async () => {
-		const args = await LoadTestManager.setupRequest();
+	runTest: async ( batchSize, batchCount ) => {
+		const args = await AddToCartTest.setupRequest();
 
-		const total = 10;
 		const requestCompletionTime = [];
 		let errorCount = 0;
-		for( let ctr = 0; ctr < total; ctr++ ) {
+		for( let ctr = 0; ctr < batchSize; ctr++ ) {
 			let timeStart = Date.now();
-			const requestPromise = LoadTestManager.generateTestRequest( args, 2 ).then(
+			const requestPromise = AddToCartTest.generateTestRequest( args, batchCount ).then(
 				() => {
 					const timeEnd = Date.now();
 					requestCompletionTime.push( timeEnd - timeStart );
@@ -41,7 +40,7 @@ const LoadTestManager = {
 		return await response.json();
 	},
 
-	generateTestRequest: ( args,  batchSize = 1 ) => {
+	generateTestRequest: ( args,  batchCount = 1 ) => {
 		const formData = new FormData();
 		const requests = [];
 		for ( let key in args ) {
@@ -52,7 +51,7 @@ const LoadTestManager = {
 		}
 		formData.append( 'test_slug', 'add-to-cart' );
 		formData.append( 'action', 'execute' );
-		for( let i = 0; i < batchSize; i++ ) {
+		for( let i = 0; i < batchCount; i++ ) {
 			requests.push(
 				fetch( '',
 					{
@@ -70,12 +69,22 @@ const LoadTestManager = {
 };
 
 window.onload = () => {
-	const startButton = document.getElementsByClassName( 'start_test' );
+	const startButton = document.getElementsByClassName( 'test-submit add-to-cart' )[0];
 
-	startButton.onclick = () => {
-		console.log('Starting test!');
-		const results = LoadTestManager.runTest();
-		console.log('Test completed, visualizing');
+	startButton.onclick = async () => {
+		startButton.classList.add( 'disabled' );
+		try {
+			console.log( 'Starting test!' );
+			const batchCount = document.getElementById(
+				'wc-add-to-cart-number-of-batches' ).value || 10;
+			const batchSize = document.getElementById(
+				'wc-add-to-cart-batch-size' ).value || 5;
+			const results = await AddToCartTest.runTest( batchSize,
+				batchCount );
+			console.log( 'Test completed, visualizing', results );
+		} finally {
+			startButton.classList.remove( 'disabled' );
+		}
 	};
 
 };
