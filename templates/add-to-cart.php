@@ -25,6 +25,6 @@
 		</p>
 	</div>
 	<div class="results">
-		<svg class="wc-add-to-cart-results"></svg>
+		<div id="wc-add-to-cart-results-graph"></div>
 	</div>
 </div>

@@ -26,6 +26,7 @@ class Dashboard {
 	public static function enqueue_scripts() {
 		if ( 'tools_page_load-testing' === \get_current_screen()->id ) {
 			wp_enqueue_script( 'load-testing-dashboard', plugins_url( '/assets/js/dashboard.js', WC_LOAD_TEST_PATH ) );
+			wp_enqueue_script( 'd3js',plugins_url( '/assets/js/d3.js', WC_LOAD_TEST_PATH ) );
 		}
 	}
 
@@ -48,8 +49,6 @@ class Dashboard {
 		if ( ! empty( $_POST['test_slug'] ) ) {
 			return;
 		}
-		wp_register_script( 'd3js', 'https://d3js.org/d3.v5.min.js', null, null, true );
-		wp_enqueue_script('d3js');
 
 		?>
 		<h1>WooCommerce Load Testing</h1>

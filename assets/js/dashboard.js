@@ -74,14 +74,12 @@ window.onload = () => {
 	startButton.onclick = async () => {
 		startButton.classList.add( 'disabled' );
 		try {
-			console.log( 'Starting test!' );
 			const batchCount = document.getElementById(
 				'wc-add-to-cart-number-of-batches' ).value || 10;
 			const batchSize = document.getElementById(
 				'wc-add-to-cart-batch-size' ).value || 5;
 			const results = await AddToCartTest.runTest( batchSize,
 				batchCount );
-			console.log( 'Test completed, visualizing', results );
 		} finally {
 			startButton.classList.remove( 'disabled' );
 		}
