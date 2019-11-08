@@ -13,7 +13,7 @@ class AddToCartLoadTest extends LoadTest {
 				'sales_price'    => 2,
 				'tax_status'     => 'taxable',
 				'manage_stock'   => true,
-				'stock_quantity' => 1000,
+				'stock_quantity' => 100000,
 				'stock_status'   => 'instock',
 			)
 		);
@@ -21,6 +21,7 @@ class AddToCartLoadTest extends LoadTest {
 		return array(
 			'product_id' => $product->get_id(),
 			'quantity' => 1,
+			'test_slug' => 'add-to-cart',
 		);
 	}
 

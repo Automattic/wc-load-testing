@@ -57,6 +57,7 @@ class Dashboard {
 
 		// All available load tests.
 		\AddToCartLoadTest::render();
+		\ProcessCheckout::render();
 	}
 
 	public static function load_testing_setup() {
@@ -68,6 +69,10 @@ class Dashboard {
 		switch ( $_POST['test_slug'] ) {
 			case 'add-to-cart':
 				$args = \AddToCartLoadTest::setup();
+				break;
+			case 'process-checkout':
+				$args = \ProcessCheckout::setup();
+				break;
 		}
 		wp_send_json( $args, 200 );
 		die();
@@ -81,6 +86,10 @@ class Dashboard {
 		switch ( $_POST['test_slug'] ) {
 			case 'add-to-cart':
 				\AddToCartLoadTest::add_simple_product_to_cart();
+				break;
+			case 'process-checkout':
+				\ProcessCheckout::process_checkout_with_coupons();
+				break;
 		}
 		wp_send_json( array(), 200 );
 	}
