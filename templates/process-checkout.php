@@ -1,6 +1,7 @@
 <div class="wc-test-process-checkout wc-load-test wc-load-test-container">
 	<h3>Process checkout</h3>
-	<p>Load tests process_checkout. This initializes a cart with one product and couple of coupons. Do not modify the cart for this user while the tests are runnning.</p>
+	<p>Load tests process_checkout. This initializes a cart with one product and couple of coupons. Do not modify the cart for this user while the tests are running.</p>
+	<p>This needs Cash on delivery payment gateway enabled to work properly</p>
 	<div class="header-area">
 		<table>
 			<tr>
