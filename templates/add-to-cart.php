@@ -5,18 +5,18 @@
 		<table>
 			<tr>
 				<td>
-					<label for="wc-add-to-cart-batch-size">Batch size </label>
+					<label for="wc-add-to-cart-number-of-batches">Start at: </label>
 				</td>
 				<td>
-					<input id="wc-add-to-cart-batch-size" type="number">
+					<input id="wc-add-to-cart-number-of-batches" type="number">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<label for="wc-add-to-cart-number-of-batches">Number of batches </label>
+					<label for="wc-add-to-cart-batch-size">End at: </label>
 				</td>
 				<td>
-					<input id="wc-add-to-cart-number-of-batches" type="number">
+					<input id="wc-add-to-cart-batch-size" type="number">
 				</td>
 			</tr>
 		</table>

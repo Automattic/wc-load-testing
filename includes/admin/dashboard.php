@@ -53,6 +53,7 @@ class Dashboard {
 
 		?>
 		<h1>WooCommerce Load Testing</h1>
+		<h2 class="red">Warning: DO NOT RUN ON PRODUCTION DATABASE!! This will add lots of junk data and will modify some settings!</h2>
 		<?php
 
 		// All available load tests.

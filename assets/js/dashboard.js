@@ -1,22 +1,26 @@
 /*jshint esversion: 6 */
 
 const RunLoadTest = {
-	runTest: async ( args, batchSize, batchCount, batchCB ) => {
+	runTest: async ( args, startStep, endStep, batchCB ) => {
 		const requestCompletionTime = [];
 		let errorCount = 0;
-		for( let ctr = 0; ctr < batchSize; ctr++ ) {
-			let timeStart = Date.now();
-			const requestPromise = RunLoadTest.generateTestRequest( args, batchCount ).then(
-				() => {
-					const timeTaken = Date.now() - timeStart;
-					requestCompletionTime.push( timeTaken );
-					batchCB( timeTaken );
-				},
-				() => {
-					errorCount += 1;
-				}
-			);
-			await requestPromise;
+		for( let ctr = startStep; ctr <= endStep; ctr++ ) {
+			//3 iterations per step.
+			for ( let itr = 0; itr < 3; itr++ ) {
+				let timeStart = Date.now();
+				const requestPromise = RunLoadTest.generateTestRequest( args,
+					ctr ).then(
+					() => {
+						const timeTaken = Date.now() - timeStart;
+						requestCompletionTime.push( timeTaken );
+						batchCB( timeTaken, ctr, itr );
+					},
+					() => {
+						errorCount += 1;
+					}
+				);
+				await requestPromise;
+			}
 		}
 		return requestCompletionTime;
 	},
@@ -26,22 +30,34 @@ const RunLoadTest = {
 		return new Chart( ctx, {
 			type: 'line',
 			data: {
-				datasets: [ { data: [], fill: false, label: 'Time taken to complete whole batch (in ms)' } ],
+				datasets: [
+					{
+						data: [],
+						fill: false,
+						label: 'Time taken to complete whole batch (s)',
+						borderColor: 'rgb(255, 0, 0)',
+					},
+					{
+						data: [],
+						fill: false,
+						label: 'Apparent throughput (rq/m)',
+						borderColor: 'rgb(255, 92, 232)',
+					}
+				]
 			},
 			options: {
 				title: {
 					display: true,
 					text: label
-				}
+				},
 			}
 		} );
 	},
 
-	updateChart: ( newResult, chart ) => {
-		chart.data.datasets.forEach( ( dataset ) => {
-			dataset.data.push( newResult );
-		} );
-		chart.data.labels.push( ( chart.data.labels.length || 0 ) + 1 );
+	updateChart: ( newResult, batchSize, batchCount, chart ) => {
+		chart.data.datasets[0].data.push( newResult / 1000 );
+		chart.data.datasets[1].data.push( batchSize * 1000 * 60 / newResult );
+		chart.data.labels.push( "Batch-" + batchSize + "." + ( batchCount + 1 ) );
 		chart.update();
 	},
 
@@ -54,6 +70,7 @@ const RunLoadTest = {
 			}
 			formData.append( key, args[ key ] );
 		}
+		const requestTime = [];
 		formData.append( 'action', 'execute' );
 		for( let i = 0; i < batchCount; i++ ) {
 			requests.push(
@@ -94,17 +111,17 @@ const AddToCartTest = {
 		startButton.classList.add( 'disabled' );
 		try {
 			const chart = RunLoadTest.createChart( 'wc-add-to-cart-results-graph', 'Add to cart load test' );
-			const batches = document.getElementById(
-				'wc-add-to-cart-number-of-batches' ).value || 10;
-			const batchSize = document.getElementById(
+			const startStep = document.getElementById(
+				'wc-add-to-cart-number-of-batches' ).value || 1;
+			const endStep = document.getElementById(
 				'wc-add-to-cart-batch-size' ).value || 5;
 			const args = await AddToCartTest.setupRequest();
-			await RunLoadTest.runTest(
+			const results = await RunLoadTest.runTest(
 				args,
-				batches,
-				batchSize,
-				( newResult ) => {
-					RunLoadTest.updateChart( newResult, chart );
+				startStep,
+				endStep,
+				( newResult, batchSize, batchCount ) => {
+					RunLoadTest.updateChart( newResult, batchSize, batchCount, chart );
 				},
 			);
 		} finally {
@@ -137,18 +154,17 @@ const ProcessCheckoutTest = {
 		startButton.classList.add( 'disabled' );
 		try {
 			const chart = RunLoadTest.createChart( 'wc-test-process-checkout-results-graph', 'Process checkout load test' );
-			const batches = document.getElementById(
+			const startStep = document.getElementById(
 				'wc-test-process-checkout-number-of-batches' ).value || 10;
-			const batchSize = document.getElementById(
+			const endStep = document.getElementById(
 				'wc-test-process-checkout-batch-size' ).value || 5;
 			const args = await ProcessCheckoutTest.setupRequest();
-			console.log("Received args: ", args);
-			await RunLoadTest.runTest(
+			const results = await RunLoadTest.runTest(
 				args,
-				batches,
-				batchSize,
-				( newResult ) => {
-					RunLoadTest.updateChart( newResult, chart );
+				startStep,
+				endStep,
+				( newResult, batchSize, batchCount ) => {
+					RunLoadTest.updateChart( newResult, batchSize, batchCount, chart );
 				},
 			);
 		} finally {

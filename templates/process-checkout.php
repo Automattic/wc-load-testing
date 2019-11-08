@@ -5,18 +5,18 @@
 		<table>
 			<tr>
 				<td>
-					<label for="wc-test-process-checkout-batch-size">Batch size </label>
+					<label for="wc-test-process-checkout-number-of-batches">Start at:</label>
 				</td>
 				<td>
-					<input id="wc-test-process-checkout-batch-size" type="number">
+					<input id="wc-test-process-checkout-number-of-batches" type="number">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<label for="wc-test-process-checkout-number-of-batches">Number of batches </label>
+					<label for="wc-test-process-checkout-batch-size">End at:</label>
 				</td>
 				<td>
-					<input id="wc-test-process-checkout-number-of-batches" type="number">
+					<input id="wc-test-process-checkout-batch-size" type="number">
 				</td>
 			</tr>
 		</table>
