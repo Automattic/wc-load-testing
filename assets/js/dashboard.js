@@ -118,8 +118,8 @@ const AddToCartTest = {
 			const args = await AddToCartTest.setupRequest();
 			const results = await RunLoadTest.runTest(
 				args,
-				startStep,
-				endStep,
+				parseInt( startStep ),
+				parseInt( endStep ),
 				( newResult, batchSize, batchCount ) => {
 					RunLoadTest.updateChart( newResult, batchSize, batchCount, chart );
 				},
