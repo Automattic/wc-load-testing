@@ -20,6 +20,14 @@
 					<input id="wc-test-process-checkout-batch-size" type="number">
 				</td>
 			</tr>
+			<tr>
+				<td>
+					<label for="wc-test-process-checkout-stock-quantity">Stock quantity:</label>
+				</td>
+				<td>
+					<input id="wc-test-process-checkout-stock-quantity" type="number">
+				</td>
+			</tr>
 		</table>
 		<p>
 			<div class="hidden wc-test-process-checkout-nonce">

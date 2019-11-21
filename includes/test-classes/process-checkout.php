@@ -18,7 +18,7 @@ class ProcessCheckout extends LoadTest {
 				'sales_price'    => 50,
 				'tax_status'     => 'taxable',
 				'manage_stock'   => true,
-				'stock_quantity' => 100000,
+				'stock_quantity' => (int) ( $_POST['stock_quantity'] ),
 				'stock_status'   => 'instock',
 			)
 		);

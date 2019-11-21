@@ -136,6 +136,8 @@ const ProcessCheckoutTest = {
 		const formData = new FormData();
 		formData.append( 'test_slug', 'process-checkout' );
 		formData.append( 'action', 'setup' );
+		const stockQuantity = document.getElementById( 'wc-test-process-checkout-stock-quantity' ).value;
+		formData.append( 'stock_quantity', stockQuantity );
 		const response = await fetch( '',
 			{
 				method: 'POST',
