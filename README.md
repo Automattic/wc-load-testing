@@ -1,5 +1,9 @@
+# DO NOT USE ON LIVE SITES OR LIVE DATABASES! ONLY FOR TESTING! THIS WILL MODIFY YOUR SITE SETTINGS AND WILL ADD JUNK DATA!
+
 # wc-load-testing
 Load testing for common but expensive WooCommerce flows.
+
+Tested on FireFox
 
 # Install
 1. Clone this repo into the plugins folder.
