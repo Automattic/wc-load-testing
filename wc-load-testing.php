@@ -4,7 +4,7 @@
  * Plugin Name: WooCommerce Load Testing
  * Plugin URI: https://woocommerce.com/
  * Description: Simulates load testing from browser for common WooCommerce scenarios.
- * Version: 1.0.0
+ * Version: 0.0.1
  * Author: Automattic
  * Author URI: https://woocommerce.com
  *
