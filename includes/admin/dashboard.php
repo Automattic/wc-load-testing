@@ -92,7 +92,6 @@ class Dashboard {
 				\ProcessCheckout::process_checkout_with_coupons();
 				break;
 		}
-		wp_send_json( array(), 200 );
 	}
 
 }

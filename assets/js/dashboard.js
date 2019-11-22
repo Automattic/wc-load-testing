@@ -4,7 +4,7 @@ const RunLoadTest = {
 	runTest: async ( args, startStep, endStep, batchCB ) => {
 		const requestCompletionTime = [];
 		let errorCount = 0;
-		for( let ctr = startStep; ctr <= endStep; ctr++ ) {
+		for( let ctr = parseInt( startStep ); ctr <= parseInt( endStep ); ctr++ ) {
 			//3 iterations per step.
 			for ( let itr = 0; itr < 3; itr++ ) {
 				let timeStart = Date.now();
