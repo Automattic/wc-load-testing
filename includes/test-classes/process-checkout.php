@@ -24,27 +24,27 @@ class ProcessCheckout extends LoadTest {
 		);
 		$product->save();
 
-		$coupon_with_global_usage_limit = new \WC_Coupon();
-		$coupon_with_global_usage_limit->set_code( 'load-test-coupon-10' . time() );
-		$coupon_with_global_usage_limit->set_amount( 10 );
-		$coupon_with_global_usage_limit->set_discount_type( 'percent' );
-		$coupon_with_global_usage_limit->set_usage_limit( 100000 );
-		$coupon_with_global_usage_limit->save();
-
-		$coupon_with_per_user_usage_limit = new \WC_Coupon();
-		$coupon_with_per_user_usage_limit->set_code( 'load-test-coupon-20' . time() );
-		$coupon_with_per_user_usage_limit->set_amount( 20 );
-		$coupon_with_per_user_usage_limit->set_discount_type( 'percent' );
-		$coupon_with_per_user_usage_limit->set_usage_limit_per_user( 100000 );
-		$coupon_with_per_user_usage_limit->save();
+//		$coupon_with_global_usage_limit = new \WC_Coupon();
+//		$coupon_with_global_usage_limit->set_code( 'load-test-coupon-10' . time() );
+//		$coupon_with_global_usage_limit->set_amount( 10 );
+//		$coupon_with_global_usage_limit->set_discount_type( 'percent' );
+//		$coupon_with_global_usage_limit->set_usage_limit( 100000 );
+//		$coupon_with_global_usage_limit->save();
+//
+//		$coupon_with_per_user_usage_limit = new \WC_Coupon();
+//		$coupon_with_per_user_usage_limit->set_code( 'load-test-coupon-20' . time() );
+//		$coupon_with_per_user_usage_limit->set_amount( 20 );
+//		$coupon_with_per_user_usage_limit->set_discount_type( 'percent' );
+//		$coupon_with_per_user_usage_limit->set_usage_limit_per_user( 100000 );
+//		$coupon_with_per_user_usage_limit->save();
 
 		WC()->frontend_includes();
 		wc_load_cart();
 		wc_empty_cart( true );
 
 		WC()->cart->add_to_cart( $product->get_id(), 1 );
-		WC()->cart->apply_coupon( $coupon_with_global_usage_limit->get_code() );
-		WC()->cart->apply_coupon( $coupon_with_per_user_usage_limit->get_code() );
+//		WC()->cart->apply_coupon( $coupon_with_global_usage_limit->get_code() );
+//		WC()->cart->apply_coupon( $coupon_with_per_user_usage_limit->get_code() );
 		$package = array(
 			'destination' => array(
 				'country'  => 'US',
@@ -58,8 +58,8 @@ class ProcessCheckout extends LoadTest {
 		return array(
 			'product_id'         => $product->get_id(),
 			'quantity'           => 1,
-			'coupon1'            => $coupon_with_global_usage_limit->get_code(),
-			'coupon2'            => $coupon_with_per_user_usage_limit->get_code(),
+//			'coupon1'            => $coupon_with_global_usage_limit->get_code(),
+//			'coupon2'            => $coupon_with_per_user_usage_limit->get_code(),
 			'test_slug'          => 'process-checkout',
 			'payment_method'     => 'cod',
 			'shipping_method'    => 'free_shipping',
