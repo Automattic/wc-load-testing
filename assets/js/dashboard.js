@@ -3,6 +3,7 @@
 const RunLoadTest = {
 	runTest: async ( args, startStep, endStep, batchCB ) => {
 		const requestCompletionTime = [];
+		const failedRequests = [];
 		let errorCount = 0;
 		for( let ctr = parseInt( startStep ); ctr <= parseInt( endStep ); ctr++ ) {
 			//3 iterations per step.
@@ -10,10 +11,20 @@ const RunLoadTest = {
 				let timeStart = Date.now();
 				const requestPromise = RunLoadTest.generateTestRequest( args,
 					ctr ).then(
-					() => {
+					( responses ) => {
+						let failedReqCount = 0;
+						responses.forEach( ( response ) => {
+							console.log( response );
+							if ( 'success' !== response.result ) {
+								console.log( 'Error: ', response.status );
+								failedReqCount++;
+							}
+						} );
 						const timeTaken = Date.now() - timeStart;
 						requestCompletionTime.push( timeTaken );
-						batchCB( timeTaken, ctr, itr );
+						const failedReqPercent = failedReqCount / ctr * 100;
+						failedRequests.push( failedReqPercent );
+						batchCB( timeTaken, failedReqPercent, ctr, itr );
 					},
 					() => {
 						errorCount += 1;
@@ -22,7 +33,7 @@ const RunLoadTest = {
 				await requestPromise;
 			}
 		}
-		return requestCompletionTime;
+		return [ requestCompletionTime, failedRequests ];
 	},
 
 	createChart: ( id, label ) => {
@@ -35,13 +46,19 @@ const RunLoadTest = {
 						data: [],
 						fill: false,
 						label: 'Time taken to complete whole batch (s)',
-						borderColor: 'rgb(255, 0, 0)',
+						borderColor: 'rgb(33,255,64)',
 					},
 					{
 						data: [],
 						fill: false,
 						label: 'Apparent throughput (rq/m)',
 						borderColor: 'rgb(255, 92, 232)',
+					},
+					{
+						data: [],
+						fill: false,
+						label: 'Failed request percent (%)',
+						borderColor: "rgb(255, 0, 0)",
 					}
 				]
 			},
@@ -54,9 +71,10 @@ const RunLoadTest = {
 		} );
 	},
 
-	updateChart: ( newResult, batchSize, batchCount, chart ) => {
+	updateChart: ( newResult, failedReqPercent, batchSize, batchCount, chart ) => {
 		chart.data.datasets[0].data.push( newResult / 1000 );
 		chart.data.datasets[1].data.push( batchSize * 1000 * 60 / newResult );
+		chart.data.datasets[2].data.push( failedReqPercent );
 		chart.data.labels.push( "Batch-" + batchSize + "." + ( batchCount + 1 ) );
 		chart.update();
 	},
@@ -82,7 +100,9 @@ const RunLoadTest = {
 						credentials : 'same-origin',
 						body : formData,
 					},
-				),
+				).then( async ( response ) => {
+					return await response.json();
+				}),
 			);
 		}
 		return Promise.all( requests );
@@ -120,8 +140,8 @@ const AddToCartTest = {
 				args,
 				parseInt( startStep ),
 				parseInt( endStep ),
-				( newResult, batchSize, batchCount ) => {
-					RunLoadTest.updateChart( newResult, batchSize, batchCount, chart );
+				( newResult, failedReqPercent, batchSize, batchCount ) => {
+					RunLoadTest.updateChart( newResult, failedReqPercent, batchSize, batchCount, chart );
 				},
 			);
 		} finally {
@@ -165,8 +185,8 @@ const ProcessCheckoutTest = {
 				args,
 				startStep,
 				endStep,
-				( newResult, batchSize, batchCount ) => {
-					RunLoadTest.updateChart( newResult, batchSize, batchCount, chart );
+				( newResult, failedReqPercent, batchSize, batchCount ) => {
+					RunLoadTest.updateChart( newResult, failedReqPercent, batchSize, batchCount, chart );
 				},
 			);
 		} finally {
